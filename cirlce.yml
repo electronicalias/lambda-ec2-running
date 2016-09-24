@@ -1,13 +1,20 @@
+machine:
+  environment:
+    REGION: eu-west-1
+    BUCKET: philipsmith
+    LAMBDA_LOCATION: lambdas
+
 dependencies:
   pre:
     - wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip
     - unzip terraform_0.7.4_linux_amd64.zip
+    - zip -r lambdas.zip lambdas/* -x *.git*
 
 test:
   override:
     - ./terraform remote config -backend=S3 -backend-config="bucket=$BUCKET" -backend-config="key=$CIRCLE_BRANCH/terraform.tfstate" -backend-config="region=$REGION"
     - ./terraform get
-    - ./terraform plan -var "run_region=$REGION" -var-file="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.tfvars" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
+    - ./terraform plan -var "run_region=$REGION" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
 
 deployment:
   feature:
