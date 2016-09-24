@@ -1,0 +1,27 @@
+dependencies:
+  pre:
+    - wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip
+    - unzip terraform_0.7.4_linux_amd64.zip
+
+test:
+  override:
+    - ./terraform remote config -backend=S3 -backend-config="bucket=$BUCKET" -backend-config="key=$CIRCLE_BRANCH/terraform.tfstate" -backend-config="region=$REGION"
+    - ./terraform get
+    - ./terraform plan -var "run_region=$REGION" -var-file="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.tfvars" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
+
+deployment:
+  feature:
+    branch: /feature_.*/
+    commands:
+      - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
+      - ./terraform remote push
+  development:
+    branch: develop
+    commands:
+      - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
+      - ./terraform remote push
+  production:
+    branch: master
+    commands:
+      - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
+      - ./terraform remote push
