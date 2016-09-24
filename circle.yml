@@ -1,4 +1,4 @@
-;machine:
+machine:
   environment:
     REGION: eu-west-1
     BUCKET: philipsmith
