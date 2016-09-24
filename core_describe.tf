@@ -49,3 +49,9 @@ resource "aws_api_gateway_rest_api" "InstanceApi" {
   name = "InstanceApi"
   description = "Terraform created API by psmith"
 }
+
+resource "aws_api_gateway_resource" "psmithAPIresource" {
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  parent_id = "${aws_api_gateway_rest_api.InstanceApi.root_resource_id}"
+  path_part = "instances"
+}
