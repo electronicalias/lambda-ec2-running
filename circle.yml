@@ -1,3 +1,9 @@
+machine:
+  environment:
+    REGION: eu-west-1
+    BUCKET: philipsmith
+    LAMBDA_LOCATION: lambdas
+
 dependencies:
   pre:
     - wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip
