@@ -55,3 +55,10 @@ resource "aws_api_gateway_resource" "psmithAPIresource" {
   parent_id = "${aws_api_gateway_rest_api.InstanceApi.root_resource_id}"
   path_part = "instances"
 }
+
+resource "aws_api_gateway_method" "instanceGetMethod" {
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  resource_id = "${aws_api_gateway_resource.psmithAPIresource.id}"
+  http_method = "GET"
+  authorization = "NONE"
+}
