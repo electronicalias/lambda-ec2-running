@@ -8,7 +8,7 @@ dependencies:
   pre:
     - wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip
     - unzip terraform_0.7.4_linux_amd64.zip
-    - zip -r lambdas.zip lambdas/* -x *.git*
+    - cd lambdas && zip -r ../lambdas.zip * -x *.git*
     - mkdir "$CIRCLE_BRANCH"
 
 test:
