@@ -50,7 +50,7 @@ resource "aws_api_gateway_rest_api" "InstanceApi" {
   description = "Terraform created API by psmith"
 }
 
-resource "aws_api_gateway_resource" "psmithAPIresource" {
+resource "aws_api_gateway_resource" "instanceApiResource" {
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   parent_id = "${aws_api_gateway_rest_api.InstanceApi.root_resource_id}"
   path_part = "instances"
@@ -58,7 +58,16 @@ resource "aws_api_gateway_resource" "psmithAPIresource" {
 
 resource "aws_api_gateway_method" "instanceGetMethod" {
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
-  resource_id = "${aws_api_gateway_resource.psmithAPIresource.id}"
+  resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
   http_method = "GET"
   authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "instanceIntegration" {
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
+  http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
+  type = "AWS"
+  uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:632826021673:function:${aws_lambda_function.test_lambda.function_name}/invocations"
+  integration_http_method = "POST"
 }
