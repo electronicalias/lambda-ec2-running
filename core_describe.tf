@@ -44,3 +44,8 @@ resource "aws_lambda_function" "test_lambda" {
     source_code_hash = "${base64sha256(file("lambdas.zip"))}"
     runtime = "python2.7"
 }
+
+resource "aws_api_gateway_rest_api" "InstanceApi" {
+  name = "InstanceApi"
+  description = "Terraform created API by psmith"
+}
