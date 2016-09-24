@@ -1,4 +1,4 @@
-machine:
+;machine:
   environment:
     REGION: eu-west-1
     BUCKET: philipsmith
@@ -14,7 +14,7 @@ test:
   override:
     - ./terraform remote config -backend=S3 -backend-config="bucket=$BUCKET" -backend-config="key=$CIRCLE_BRANCH/terraform.tfstate" -backend-config="region=$REGION"
     - ./terraform get
-    - ./terraform plan -var "run_region=$REGION" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
+    - ./terraform plan -var "run_region=$REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
 
 deployment:
   feature:
