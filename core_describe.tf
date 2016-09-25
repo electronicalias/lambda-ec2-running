@@ -71,3 +71,15 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
   uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:632826021673:function:${aws_lambda_function.test_lambda.function_name}/invocations"
   integration_http_method = "POST"
 }
+
+
+resource "aws_api_gateway_deployment" "instanceDeployment" {
+  depends_on = ["aws_api_gateway_method.instanceGetMethod"]
+
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  stage_name = "test"
+
+  variables = {
+    "answer" = "42"
+  }
+}
