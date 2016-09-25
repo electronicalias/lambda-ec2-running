@@ -105,7 +105,7 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
   http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
-  credenials = "${aws_iam_role.iam_for_apigw.arn}"
+  credentials = "${aws_iam_role.iam_for_apigw.arn}"
   type = "AWS"
   uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:632826021673:function:${aws_lambda_function.test_lambda.function_name}/invocations"
   integration_http_method = "GET"
