@@ -45,20 +45,13 @@ resource "aws_iam_role_policy" "terra_lambda_iam_policy" {
   "Statement": [
     {
       "Action": [
-        "ec2:Describe*"
-      ],
-      "Effect": "Allow",
-      "Resource": "*"
-    },
-    {
-      "Sid": "",
-      "Resource": "*",
-      "Action": [
+        "ec2:Describe*",
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
-      "Effect": "Allow"
+      "Effect": "Allow",
+      "Resource": "*"
     }
   ]
 }
@@ -84,7 +77,7 @@ resource "aws_iam_role_policy" "terra_api_gateway_policy" {
 EOF
 }
 
-resource "aws_lambda_function" "test_lambda" {
+resource "aws_lambda_function" "getInstancesLambda" {
     filename = "lambdas.zip"
     function_name = "core_describe"
     role = "${aws_iam_role.terra_iam_for_lambda.arn}"
