@@ -1,6 +1,6 @@
-resource "aws_iam_role_policy" "test_policy" {
-    name = "test_policy"
-    role = "${aws_iam_role.iam_for_lambda.id}"
+resource "aws_iam_role_policy" "terra_lambda_iam_policy" {
+    name = "terra_lambda_iam_policy"
+    role = "${aws_iam_role.terra_iam_for_lambda.id}"
     policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -11,6 +11,16 @@ resource "aws_iam_role_policy" "test_policy" {
       ],
       "Effect": "Allow",
       "Resource": "*"
+    },
+    {
+      "Sid": "",
+      "Resource": "*",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow"
     }
   ]
 }
@@ -19,7 +29,7 @@ EOF
 
 resource "aws_iam_role_policy" "terra_api_gateway_policy" {
     name = "terra_api_gateway_policy"
-    role = "${aws_iam_role.iam_for_apigw.id}"
+    role = "${aws_iam_role.terra_iam_for_apigw.id}"
     policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -36,8 +46,8 @@ resource "aws_iam_role_policy" "terra_api_gateway_policy" {
 EOF
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
-    name = "iam_for_lambda"
+resource "aws_iam_role" "terra_iam_for_lambda" {
+    name = "terra_iam_for_lambda"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -55,8 +65,8 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
-resource "aws_iam_role" "iam_for_apigw" {
-    name = "iam_for_apigw"
+resource "aws_iam_role" "terra_iam_for_apigw" {
+    name = "terra_iam_for_apigw"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
