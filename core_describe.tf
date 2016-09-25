@@ -134,7 +134,7 @@ resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
 
 
 resource "aws_api_gateway_deployment" "instanceDeployment" {
-  depends_on = [ "aws_api_gateway_method.instanceGetMethod", "aws_api_gateway_integration_response.instanceIntegrationResponse" ]
+  depends_on = [ "aws_api_gateway_method.instanceGetMethod", "aws_api_gateway_integration_response.instanceIntegrationResponse", "aws_api_gateway_integration.instanceIntegration" ]
 
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   stage_name = "production"
