@@ -126,6 +126,9 @@ resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
   http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
   status_code = "${aws_api_gateway_method_response.200.status_code}"
+  response_templates = { "application/json" = {
+    \"body-json\" : $input.json('$'),
+  } }
 }
 
 
