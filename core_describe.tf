@@ -119,7 +119,7 @@ resource "aws_api_gateway_deployment" "instanceDeployment" {
   depends_on = ["aws_api_gateway_method.instanceGetMethod"]
 
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
-  stage_name = "test"
+  stage_name = "production"
 
   variables = {
     "answer" = "42"
