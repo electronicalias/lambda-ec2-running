@@ -104,6 +104,13 @@ resource "aws_api_gateway_method" "instanceGetMethod" {
   authorization = "NONE"
 }
 
+resource "aws_api_gateway_method_response" "200" {
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
+  http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
+  status_code = "200"
+}
+
 resource "aws_api_gateway_integration" "instanceIntegration" {
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
@@ -112,6 +119,13 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
   type = "AWS"
   uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:632826021673:function:${aws_lambda_function.getInstancesLambda.function_name}/invocations"
   integration_http_method = "POST"
+}
+
+resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
+  rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
+  resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
+  http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
+  status_code = "${aws_api_gateway_method_response.200.status_code}"
 }
 
 
