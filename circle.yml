@@ -33,3 +33,4 @@ deployment:
     commands:
       - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
       - ./terraform remote push
+      - ./terraform -plan $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan -destroy
