@@ -129,6 +129,7 @@ resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
   response_templates = { 
     "application/json" = "$input.json('$')"
   }
+  depends_on = [ "aws_api_gateway_method.instanceGetMethod" ]
 }
 
 
