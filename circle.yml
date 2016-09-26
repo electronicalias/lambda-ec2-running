@@ -9,7 +9,7 @@ test:
   override:
     - ./terraform remote config -backend=S3 -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$CIRCLE_BRANCH/terraform.tfstate" -backend-config="region=$RUN_REGION"
     - ./terraform get
-    - ./terraform plan -var "account_id=$ACCOUNT_ID" -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
+    - ./terraform plan -var 'account_id="$ACCOUNT_ID"'' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan"
 
 deployment:
   feature:
@@ -27,5 +27,5 @@ deployment:
     commands:
       - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
       - ./terraform remote push
-      - ./terraform plan -var "account_id=$ACCOUNT_ID" -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy
-      - ./terraform destroy -var "account_id=$ACCOUNT_ID" -var "run_region=$RUN_REGION" -force
+      - ./terraform plan -var 'account_id="$ACCOUNT_ID"'' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy
+      - ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force
