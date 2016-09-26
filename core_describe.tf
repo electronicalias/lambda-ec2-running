@@ -117,7 +117,7 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
   http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
   credentials = "${aws_iam_role.terra_iam_for_apigw.arn}"
   type = "AWS"
-  uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:${var.account_id}:function:${aws_lambda_function.getInstancesLambda.function_name}/invocations"
+  uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:${aws_lambda_function.getInstancesLambda.arn}:function:${aws_lambda_function.getInstancesLambda.function_name}/invocations"
   integration_http_method = "POST"
 }
 
@@ -134,7 +134,14 @@ resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
 
 
 resource "aws_api_gateway_deployment" "instanceDeployment" {
-  depends_on = [ "aws_api_gateway_rest_api.InstanceApi", "aws_api_gateway_resource.instanceApiResource", "aws_api_gateway_method.instanceGetMethod", "aws_api_gateway_integration_response.instanceIntegrationResponse", "aws_api_gateway_integration.instanceIntegration", "aws_api_gateway_method_response.200"]
+  depends_on = [ 
+    "aws_api_gateway_rest_api.InstanceApi", 
+    "aws_api_gateway_resource.instanceApiResource", 
+    "aws_api_gateway_method.instanceGetMethod", 
+    "aws_api_gateway_integration_response.instanceIntegrationResponse", 
+    "aws_api_gateway_integration.instanceIntegration", 
+    "aws_api_gateway_method_response.200"
+  ]
 
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   stage_name = "production"
