@@ -23,10 +23,12 @@ To make it work, carry out the 6th step;
 
 6. Hash the lines that read as follows:
 `- ./terraform plan -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy`
+
 `- ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force`
 
 They should now look like this:
 `#- ./terraform plan -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy`
+
 `#- ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force`
 
 I'm going to try and add more features to this, just for my own knowledge, they would be the following:
