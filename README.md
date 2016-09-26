@@ -15,18 +15,19 @@ The first iteration of this returns all the instances running in the specified r
   RUN_REGION = [whatever region you want to configure this for]
   ACCOUNT_ID = [the numeric id of the account where you are running this]
   
-5. On the project navigate to the segment for Permissions and set the AWS Permissions
+5. On the project navigate to the segment for Permissions and set the AWS Permissions. As it stands, the environment is provisioned and immediately torn down, as this is purely for testing purposes for me while I learn to use API Gateway/Lambda. CircleCI happened to be the slickest way to configure this without having to use ANY servers such as Jenkins.
 
-As it stands, the environment is provisioned and immediately torn down, as this is purely for testing purposes for me while I learn to use API Gateway/Lambda. CircleCI happened to be the slickest way to configure this without having to use ANY servers such as Jenkins.
 
-To make it work, carry out the 6th step;
 
-6. Hash the lines that read as follows:
+6. To make it work, hash the last two lines of the circle.yml file that read as follows:
+
 `- ./terraform plan -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy`
 
 `- ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force`
 
+
 They should now look like this:
+
 `#- ./terraform plan -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy`
 
 `#- ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force`
