@@ -1,6 +1,6 @@
 machine:
   environment:
-    DELETE: false
+    DELETE: true
 
 dependencies:
   pre:
