@@ -1,3 +1,7 @@
+machine:
+  environment:
+    DELETE: FALSE
+
 dependencies:
   pre:
     - wget https://releases.hashicorp.com/terraform/0.7.4/terraform_0.7.4_linux_amd64.zip
@@ -28,4 +32,6 @@ deployment:
       - ./terraform apply $(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform.plan
       - ./terraform remote push
       - ./terraform plan -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy
-      - # ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force
+      - if [[ "$DELETE" == "true" ]]; then
+          ./terraform destroy -var 'account_id="$ACCOUNT_ID"' -var "run_region=$RUN_REGION" -force
+        fi
