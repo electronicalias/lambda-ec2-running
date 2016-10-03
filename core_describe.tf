@@ -112,6 +112,12 @@ resource "aws_api_gateway_method_response" "200" {
 }
 
 resource "aws_api_gateway_integration" "instanceIntegration" {
+  depends_on = [ 
+    "aws_lambda_function.getInstancesLambda"
+  ]
+  request_templates = { 
+    "application/json" = "$input.json('$')"
+  }
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
   http_method = "${aws_api_gateway_method.instanceGetMethod.http_method}"
