@@ -1,0 +1,17 @@
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.plan
+*.tfvars
+
+# Module directory
+.terraform/
+master
+develop
+feature*
+
+# Creds File
+creds.tf
+
+# Scripts
+*.sh
