@@ -9,6 +9,8 @@ dependencies:
     - unzip terraform_0.7.4_linux_amd64.zip
     - cd lambdas && zip -r ../lambdas.zip * -x *.git*
     - mkdir "$CIRCLE_BRANCH"
+    - touch env.tfvars
+    - echo "account_id = \"632826021673\"" > env.tfvars
 
 test:
   override:
