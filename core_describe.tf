@@ -117,7 +117,7 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
     "aws_lambda_function.getInstancesLambda"
   ]
   request_templates = { 
-    "application/json" = "$input.json('$')"
+    "application/json" = "${file("api_gateway_body_mapping.template")}"
   }
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
