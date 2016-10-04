@@ -102,6 +102,7 @@ resource "aws_api_gateway_method" "instanceGetMethod" {
   resource_id = "${aws_api_gateway_resource.instanceApiResource.id}"
   http_method = "GET"
   authorization = "NONE"
+  request_parameters = { "method.request.querystring.state" = true }
 }
 
 resource "aws_api_gateway_method_response" "200" {
