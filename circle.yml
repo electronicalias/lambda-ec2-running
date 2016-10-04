@@ -10,7 +10,7 @@ dependencies:
     - cd lambdas && zip -r ../lambdas.zip * -x *.git*
     - mkdir "$CIRCLE_BRANCH"
     - touch env.tfvars
-    - echo "account_id = \"632826021673\"" > env.tfvars
+    - echo "account_id = \"$ACCOUNT_ID\"" > env.tfvars
 
 test:
   override:
