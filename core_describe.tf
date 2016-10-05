@@ -152,7 +152,7 @@ resource "aws_api_gateway_deployment" "instanceDeployment" {
   ]
 
   rest_api_id = "${aws_api_gateway_rest_api.InstanceApi.id}"
-  stage_name = "production"
+  stage_name = "${var.build_stage}"
   description = "Version: ${var.build_version}"
 
   variables = {
