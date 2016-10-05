@@ -79,7 +79,7 @@ EOF
 
 resource "aws_lambda_function" "getInstancesLambda" {
     filename = "lambdas.zip"
-    function_name = "core_describe"
+    function_name = "core_describe_${var.build_stage}"
     role = "${aws_iam_role.terra_iam_for_lambda.arn}"
     handler = "core_describe.lambda_handler"
     source_code_hash = "${base64sha256(file("lambdas.zip"))}"
