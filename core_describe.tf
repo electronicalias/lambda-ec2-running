@@ -1,5 +1,5 @@
 resource "aws_iam_role" "terra_iam_for_lambda" {
-    name = "terra_iam_for_lambda"
+    name = "terra_${var.build_stage}_lambda"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -18,7 +18,7 @@ EOF
 }
 
 resource "aws_iam_role" "terra_iam_for_apigw" {
-    name = "terra_iam_for_apigw"
+    name = "terra_${var.build_stage}_apigw"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -37,7 +37,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "terra_lambda_iam_policy" {
-    name = "terra_lambda_iam_policy"
+    name = "terra_lambda_${var.build_stage}_policy"
     role = "${aws_iam_role.terra_iam_for_lambda.id}"
     policy = <<EOF
 {
@@ -59,7 +59,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "terra_api_gateway_policy" {
-    name = "terra_api_gateway_policy"
+    name = "terra_apigateway_${var.build_stage}_policy"
     role = "${aws_iam_role.terra_iam_for_apigw.id}"
     policy = <<EOF
 {
@@ -79,7 +79,7 @@ EOF
 
 resource "aws_lambda_function" "getInstancesLambda" {
     filename = "lambdas.zip"
-    function_name = "core_describe"
+    function_name = "core_describe_${var.build_stage}"
     role = "${aws_iam_role.terra_iam_for_lambda.arn}"
     handler = "core_describe.lambda_handler"
     source_code_hash = "${base64sha256(file("lambdas.zip"))}"
