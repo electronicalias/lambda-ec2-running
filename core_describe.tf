@@ -126,6 +126,7 @@ resource "aws_api_gateway_integration" "instanceIntegration" {
   type = "AWS"
   uri = "arn:aws:apigateway:${var.run_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.run_region}:${var.account_id}:function:${aws_lambda_function.getInstancesLambda.function_name}/invocations"
   integration_http_method = "POST"
+  passthrough_behavior = "WHEN_NO_TEMPLATES"
 }
 
 resource "aws_api_gateway_integration_response" "instanceIntegrationResponse" {
