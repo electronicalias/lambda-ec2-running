@@ -11,10 +11,15 @@ dependencies:
 
 test:
   override:
+    - mkdir "$CIRCLE_BRANCH"
     - echo "account_id = \"$ACCOUNT_ID\"" > "$CIRCLE_BRANCH\env.tfvars"
     - ./terraform remote config -backend=S3 -backend-config="bucket=$BUCKET_NAME" -backend-config="key=$CIRCLE_BRANCH/terraform.tfstate" -backend-config="region=$RUN_REGION"
     - ./terraform get
-    - ./terraform plan -var "build_stage=$(if [[ "$CIRCLE_BRANCH" == "master" ]]; then echo "production"; else echo "staging"; fi)" -var "build_version=${VER}" -var "run_region=$RUN_REGION" -var-file="$CIRCLE_BRANCH\env.tfvars" -var-file="variables.tf" -out="$CIRCLE_BRANCH/terraform.plan"
+    - ./terraform plan \
+      -var "build_stage=$(if [[ "$CIRCLE_BRANCH" == "master" ]]; then echo "production"; else echo "staging"; fi)" \
+      -var "build_version=${VER}" -var "run_region=$RUN_REGION" -var-file="$CIRCLE_BRANCH\env.tfvars" \
+      -var-file="variables.tf" \
+      -out="$CIRCLE_BRANCH/terraform.plan"
     - if [[ "$DELETE" == "true" ]]; then
         ./terraform plan -var "build_stage=$ENVIRONMENT" -var "build_version=${VER}" -var "run_region=$RUN_REGION" -var-file="$CIRCLE_BRANCH\env.tfvars" -var-file="variables.tf" -out="$(if [[ "$CIRCLE_BRANCH" != "master" ]]; then echo "develop"; else echo "master"; fi)/terraform_destroy.plan" -destroy;
       fi
@@ -33,7 +38,6 @@ deployment:
   production:
     branch: master
     commands:
-      - mkdir "$CIRCLE_BRANCH"
       - touch "$CIRCLE_BRANCH\env.tfvars"
       - if [[ "$DELETE" != "true" ]]; then
           ./terraform apply "$CIRCLE_BRANCH/terraform.plan";
